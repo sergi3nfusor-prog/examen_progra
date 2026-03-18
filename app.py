@@ -29,6 +29,19 @@ def index():
     # 3. Cursos
     cursos = conn.execute("SELECT * FROM cursos WHERE estado = 1 ORDER BY orden ASC").fetchall()
     
+    
+    # --- NUEVA LÓGICA PARA CARACTERÍSTICAS ---
+    caracteristicas_db = conn.execute("SELECT * FROM curso_caracteristicas ORDER BY orden ASC").fetchall()    
+    # Organizamos las características por el ID del curso
+    caracteristicas_por_curso = {}
+    for fila in caracteristicas_db:
+        id_curso = fila['curso_id']
+        if id_curso not in caracteristicas_por_curso:
+            caracteristicas_por_curso[id_curso] = []
+        caracteristicas_por_curso[id_curso].append(fila['caracteristica'])
+    # ------------------------------------------
+    
+    
     # 4. Estadísticas (IMPORTANTE: Esto faltaba)
     # fetchall() trae una lista de todas las filas (Cursos, Profesores, Anuncios)
     estadisticas = conn.execute("SELECT * FROM estadisticas ORDER BY orden").fetchall()
@@ -45,9 +58,10 @@ def index():
                            configuracion=configuracion, 
                            hero=hero, 
                            cursos=cursos, 
-                           estadisticas=estadisticas, # Ahora sí están definidas
+                           estadisticas=estadisticas,
                            nosotros=nosotros, 
-                           valores=valores)
+                           valores=valores,
+                           caracteristicas_por_curso=caracteristicas_por_curso) # Enviamos el diccionario
     
 @app.route('/contacto', methods=['POST'])
 def contacto():

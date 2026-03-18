@@ -75,14 +75,16 @@
                     {% for curso in cursos %}
                     <article class="card">
                         <img src="{{ url_for('static', filename=curso['imagen']) }}" alt="{{ curso['titulo'] }}" />
-                        
                         <h3>{{ curso["titulo"] }}</h3>
                         <p>{{ curso["descripcion"] }}</p>
-                            
+                        
+                        {% if curso["id"] in caracteristicas_por_curso %}
                         <ul class="list">
-                            <li>Acceso ilimitado</li>
-                            <li>Certificado de participación</li>
+                            {% for caracteristica in caracteristicas_por_curso[curso["id"]] %}
+                            <li>{{ caracteristica }}</li>
+                            {% endfor %}
                         </ul>
+                        {% endif %}
                     </article>
                     {% endfor %}
                 </div>
