@@ -37,38 +37,30 @@
         <div class=" container hero-inner">
             <div class="hero-copy">
                 <p class="pill">
-                    Amplia variedad de géneros • Tutoriales profesionales • Comunidad
-                    creativa
+                   {{ hero["mensaje_superior"] }}
                 </p>
-                <h1>Descubre tu ritmo con RitmoPro</h1>
+                <h1>{{ hero["titulo"] }}</h1>
                 <p class="lead">
-                    Aprende, practica y crea tu música con nuestras herramientas y
-                    tutoriales.
+                    {{ hero["descripcion"] }}
                 </p>
 
                 <div class="hero-actions">
-                    <a class="btn btn-primary" href="#servicios">Ver cursos</a>
-                    <a class="btn btn-ghost" href="#nosotros">Explorar comunidad</a>
+                    <a class="btn btn-primary" href="{{ hero['boton_1_url'] }}">{{ hero["boton_1_texto"] }}</a>
+                    <a class="btn btn-ghost" href="{{ hero['boton_2_url'] }}">{{ hero["boton_2_texto"] }}</a>
                 </div>
 
                 <div class="hero-metrics">
-                    <div class="metric">
-                        <span class="metric-num">50+</span>
-                        <span class="metric-label">Cursos</span>
+                    {% for est in estadisticas %}
+                    <div class="metric">    
+                        <span class="metric-num">{{ est["valor"] }}</span>
+                        <span class="metric-label">{{ est["nombre"] }}</span>
                     </div>
-                    <div class="metric">
-                        <span class="metric-num">100+</span>
-                        <span class="metric-label">Profesores</span>
-                    </div>
-                    <div class="metric">
-                        <span class="metric-num">0</span>
-                        <span class="metric-label">Anuncios</span>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
             <!-- Tarjeta de imagen en la portada: coloca tu propia imagen en /imagenes/musica/hero-placeholder.png -->
             <div class="hero-card hero-card-img">
-                <img src="images/musica/hero-placeholder.png" alt="Imagen de música" />
+                <img src="{{ url_for('static', filename='images/musica/hero-placeholder.png') }}" alt="Imagen de música" />
             </div>
             </div>
         </section>
@@ -79,39 +71,20 @@
                     <h2>Cursos</h2>
                     <p>Descubre nuestros cursos para todo tipo de músicos.</p>
                 </header>
-
                 <div class="grid-3">
+                    {% for curso in cursos %}
                     <article class="card">
-                        <img src="images/clases/clases1.png" alt="Clases en vivo" />
-                        <h3>Clases en vivo</h3>
-                        <p>Aprende con profesores expertos en sesiones interactivas.</p>
+                        <img src="{{ url_for('static', filename=curso['imagen']) }}" alt="{{ curso['titulo'] }}" />
+                        
+                        <h3>{{ curso["titulo"] }}</h3>
+                        <p>{{ curso["descripcion"] }}</p>
+                            
                         <ul class="list">
-                            <li>Instrumentos variados</li>
-                            <li>Feedback en tiempo real</li>
-                            <li>Horarios flexibles</li>
+                            <li>Acceso ilimitado</li>
+                            <li>Certificado de participación</li>
                         </ul>
                     </article>
-
-                    <article class="card">
-                        <img src="images/clases/clases2.png" alt="Clases en vivo" />
-                        <h3>Producción musical</h3>
-                        <p>Domina el software profesional y crea tus canciones.</p>
-                        <ul class="list">
-                            <li>Software de estudio</li>
-                            <li>Mezcla y masterización</li>
-                            <li>Herramientas creativas</li>
-                        </ul>
-                    </article>
-                    <article class="card">
-                        <img src="images/clases/clases3.png" alt="Clases en vivo" />
-                        <h3>Comunidades y eventos</h3>
-                        <p>Conecta con otros músicos y participa en eventos en vivo.</p>
-                        <ul class="list">
-                            <li>Foros activos</li>
-                            <li>Eventos online</li>
-                            <li>Colaboraciones</li>
-                        </ul>
-                    </article>
+                    {% endfor %}
                 </div>
             </div>
         </section>
@@ -121,30 +94,22 @@
             <div class="container split">
                 <!-- Imagen -->
                 <div class="about-gallery">
-                    <img src="images/nosotros/nosotros.jpg" alt="Equipo creativo produciendo música en estudio" />
+                    <img src="{{ url_for('static', filename='images/nosotros/nosotros.jpg') }}" alt="Equipo creativo produciendo música en estudio" />
                 </div>
                 <!-- Contenido -->
                 <div class="about-content">
-                    <h2>Nosotros</h2>
-                    <p>
-                        RitmoPro nace del amor por la música. Nuestro equipo está formado
-                        por músicos y profesionales de la tecnología dedicados a compartir
-                        conocimiento y construir comunidad.
-                    </p>
-                    <p class="muted">
-                        Nuestro objetivo es democratizar el aprendizaje musical a través
-                        de cursos accesibles y una plataforma colaborativa.
-                    </p>
+                    <h2>{{ nosotros["titulo"] }}</h2>
+                    <p>{{ nosotros["descripcion_1"] }}</p>
+                    <p class="muted">{{ nosotros["descripcion_2"] }}</p>
 
                     <div class="panel about-panel">
-                        <h3>Lo que nos mueve</h3>
-                        <p class="muted">Pasión, creatividad y comunidad.</p>
+                        <h3>{{ nosotros["subtitulo"] }}</h3>
+                        <p class="muted">{{ nosotros["resumen"] }}</p>
 
                         <div class="tags">
-                            <span class="tag">Creatividad</span>
-                            <span class="tag">Pasión</span>
-                            <span class="tag">Comunidad</span>
-                            <span class="tag">Tecnología</span>
+                            {% for val in valores %}
+                            <span class="tag">{{ val["nombre"] }}</span>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -157,7 +122,7 @@
             <h2>Contacto</h2>
             <p>¿Tienes preguntas? ¡Escríbenos!</p>
           </header>
-          <form class="form" autocomplete="on">
+          <form class="form" action="/contacto" method="POST">
             <div class="form-row">
               <label>
                 Nombre
@@ -198,7 +163,12 @@
 
     </main>
     <footer>
-
+    <div class="container" style="text-align: center; padding: 40px 0;">
+        <p>{{ configuracion["footer_texto"] }}</p>
+        <p style="font-size: 0.8em; color: gray; margin-top: 10px;">
+            {{ configuracion["direccion_contacto"] }} | {{ configuracion["email_contacto"] }}
+        </p>
+    </div>
     </footer>
 </body>
 
