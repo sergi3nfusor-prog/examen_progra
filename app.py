@@ -88,6 +88,7 @@ def ver_mensajes():
     conn.close()
     return render_template('mensajes.html', mensajes=mensajes)
 
+
 @app.route('/eliminar/<int:id>', methods=['POST'])
 def eliminar(id):
     conn = get_db_connection()
@@ -95,6 +96,7 @@ def eliminar(id):
     conn.commit()
     conn.close()
     return redirect(url_for('ver_mensajes'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
