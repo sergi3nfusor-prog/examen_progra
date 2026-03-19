@@ -63,21 +63,38 @@ def index():
                            valores=valores,
                            caracteristicas_por_curso=caracteristicas_por_curso) # Enviamos el diccionario
     
+
 @app.route('/contacto', methods=['POST'])
 def contacto():
-    # Ahora 'request' ya funcionará porque está en el import de arriba
     nombre = request.form.get('nombre')
     email = request.form.get('email')
     mensaje = request.form.get('mensaje')
     
     conn = get_db_connection()
+    # Usamos 'mensajes_contacto' que es el nombre en tu DB
     conn.execute("INSERT INTO mensajes_contacto (nombre, email, mensaje) VALUES (?, ?, ?)",
                  (nombre, email, mensaje))
     conn.commit()
     conn.close()
     
-    return redirect(url_for('index'))
+    # Redirigir a la vista de la tabla
+    return redirect(url_for('ver_mensajes'))
 
+@app.route('/mensajes')
+def ver_mensajes():
+    conn = get_db_connection()
+    # 'fecha_envio' es el nombre que aparece en tu captura de DBeaver
+    mensajes = conn.execute("SELECT id, nombre, email, mensaje, fecha_envio FROM mensajes_contacto ORDER BY id DESC").fetchall()
+    conn.close()
+    return render_template('mensajes.html', mensajes=mensajes)
+
+@app.route('/eliminar/<int:id>', methods=['POST'])
+def eliminar(id):
+    conn = get_db_connection()
+    conn.execute("DELETE FROM mensajes_contacto WHERE id = ?", (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('ver_mensajes'))
 
 if __name__ == '__main__':
     app.run(debug=True)
