@@ -42,7 +42,6 @@ def index():
     # ------------------------------------------
     
     
-    # 4. Estadísticas (IMPORTANTE: Esto faltaba)
     # fetchall() trae una lista de todas las filas (Cursos, Profesores, Anuncios)
     estadisticas = conn.execute("SELECT * FROM estadisticas ORDER BY orden").fetchall()
     
